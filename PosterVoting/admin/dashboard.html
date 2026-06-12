@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Paneli</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        
+        <h1>Admin Dashboard</h1>
+        <p id="adminInfo"></p>
+        <button id="logoutBtn">Çıkış Yap</button>
+        
+        <hr>
+
+        <h2>Yarışma Yönetimi</h2>
+        <div id="allElectionsPanel" style="background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0; font-size: 16px; color: #4a5568;">📋 Sistemde Kayıtlı Tüm Yarışmalar</h3>
+            <ul id="electionsVisualList" style="padding-left: 20px; margin-bottom: 0; line-height: 1.6;">
+                <li style="color: #718096;">Yarışmalar yükleniyor...</li>
+            </ul>
+        </div>
+
+        <input type="text" id="electionName" placeholder="Yarışma Adı">
+        <button id="btnCreateElection">Yeni Yarışma Oluştur</button>
+        <p id="electionMessage"></p>
+        
+        <hr>
+
+        <h2>CSV İçe Aktarma</h2>
+        <select id="electionSelect">
+            <option value="">Yarışma Seçiniz</option>
+        </select>
+        <br><br>
+        <input type="file" id="csvFile" accept=".csv">
+        <br><br>
+        <button id="btnImportCsv">CSV Yükle</button>
+        <p id="csvMessage"></p>
+        
+        <hr>
+
+        <h2>Oylama Kontrolü ve Kod Üretimi</h2>
+        <p>Seçili Yarışma Durumu: <strong id="electionStatusBadge">-</strong></p>
+        
+        <button id="btnStartElection" style="background: #007bff; color: white;">Oylamayı Başlat (Aktif Yap)</button>
+        <button id="btnEndElection" style="background: #ffc107; color: black;">Oylamayı Bitir (Sonuçları Aç)</button>
+        <button id="btnDeleteElection" style="background: #dc3545; color: white; margin-left: 20px;">🗑️ Seçili Yarışmayı Komple Sil</button>
+
+        <br><br>
+        
+        <input type="number" id="codeAmount" placeholder="Üretilecek Kod Sayısı" min="1" max="500">
+        <button id="btnGenerateCodes">Kod Üret</button>
+        <p id="codeMessage"></p>
+        
+        <h3>Kod İstatistikleri</h3>
+        <p>Üretilen Toplam Kod: <span id="totalCodes">0</span></p>
+        <p>Kullanılan (Oy Veren): <span id="usedCodes">0</span></p>
+        <p>Kullanılmayan (Bekleyen): <span id="unusedCodes">0</span></p>
+
+        <button id="btnShowCodes" style="background: #17a2b8; color: white;">Kodları Listele / Kopyala</button>
+        <button id="btnPrintCodes" style="background: #28a745; color: white;">Kodları Yazdır / PDF Yap</button>
+        
+        <br><br>
+        
+        <div id="codesPreviewContainer" style="display: none; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background: #fdfdfd;">
+            <h4>Mevcut Kodlar Listesi (Kopyalanabilir)</h4>
+            <p style="font-size: 12px; color: #666;">Aşağıdaki kutudan kodları topluca seçip Excel'e veya WhatsApp'a yapıştırabilirsiniz.</p>
+            <textarea id="txtCodesArea" rows="10" style="width: 100%; font-family: monospace; font-size: 14px; padding: 10px; box-sizing: border-box;" readonly></textarea>
+        </div>
+
+        <br>
+        <a href="../results.html" target="_blank">Canlı Sonuç Ekranına Git</a>
+
+    </div> <script src="../js/supabase.js"></script>
+    <script>
+        async function init() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            document.getElementById("adminInfo").innerText = "Giriş yapan admin: " + user.email;
+        }
+
+        init();
+
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+            await supabaseClient.auth.signOut();
+            window.location.href = "login.html";
+        });
+    </script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

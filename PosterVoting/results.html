@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oylama Sonuçları - Poster Sergisi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; text-align: center; background: #fdfdfd; }
+        .stat-card h3 { margin: 0 0 10px 0; font-size: 14px; color: #666; text-transform: uppercase; }
+        .stat-card p { margin: 0; font-size: 28px; font-weight: bold; color: #222; }
+        
+        .podium-section { text-align: center; margin-bottom: 40px; background: #f8f9fa; padding: 20px; border-radius: 10px; }
+        .podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 15px; margin-top: 20px; height: 180px; }
+        .podium-place { width: 120px; padding: 15px; border-radius: 8px 8px 0 0; text-align: center; font-weight: bold; color: white; }
+        .first-place { background: #ffd700; height: 160px; color: #333; order: 2; }
+        .second-place { background: #c0c0c0; height: 120px; color: #333; order: 1; }
+        .third-place { background: #cd7f32; height: 90px; color: white; order: 3; }
+        
+        .chart-container { margin-bottom: 40px; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #fff; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .results-table th, .results-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .results-table th { background-color: #f4f4f4; }
+        .results-table tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 Poster Oylama Sonuçları</h1>
+    <p>Yarışma: <strong id="currentElectionName">Yükleniyor...</strong></p>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Toplam Katılımcı</h3>
+            <p id="statVoters">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Kullanılan Toplam Oy</h3>
+            <p id="statVotes">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Kişi Başı Ortalama Oy</h3>
+            <p id="statAvg">0.0</p>
+        </div>
+    </div>
+
+    <div class="podium-section">
+        <h2>🥇 İlk 3 Poster 🥈🥉</h2>
+        <div class="podium-container" id="podiumContainer">
+            </div>
+    </div>
+
+    <div class="chart-container">
+        <h3>Oy Dağılım Grafiği (Çubuk)</h3>
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <div class="chart-container" style="max-width: 500px; margin: 0 auto 40px auto;">
+        <h3>Oy Payı Dağılımı (Pasta)</h3>
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <h2>Sıralama Listesi</h2>
+    <table class="results-table">
+        <thead>
+            <tr>
+                <th>Sıra</th>
+                <th>Poster No</th>
+                <th>Poster Adı</th>
+                <th>Danışman</th>
+                <th>Aldığı Oy</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            </tbody>
+    </table>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/results.js"></script>
+</body>
+</html>
